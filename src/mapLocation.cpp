@@ -1,4 +1,4 @@
-#include "mapLocation.h"
+#include "maplocation.h"
 
 MapLocation::MapLocation() {}
 
