@@ -1,0 +1,9 @@
+#ifndef TILETYPE_H_INCLUDED
+#define TILETYPE_H_INCLUDED
+
+enum TileType {
+    NORMAL, ROCK, START, END, SPLITTER, PAINTER
+};
+
+
+#endif // TILETYPE_H_INCLUDED
