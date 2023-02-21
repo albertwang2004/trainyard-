@@ -121,3 +121,26 @@ Direction MapLocation::getOutput() {
 Direction MapLocation::getInput() {
     return input;
 }
+std::string MapLocation::generateTextureName() {
+    switch (type) {
+    case NORMAL:
+        {
+            std::string out = "_track";
+            for (int it = 0, curr = trackCheckOrder; it < numTracks; ++it, curr=(curr+1)%numTracks) {
+                Track currentTrack = tracks[curr];
+                out += "_" + currentTrack.getName();
+            }
+            return out;
+        }
+    case ROCK:
+        return "_unpassable";
+    case START:
+        return "";
+    case END:
+        return "";
+    case SPLITTER:
+        return "";
+    case PAINTER:
+        return "";
+    }
+}

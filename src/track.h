@@ -3,6 +3,8 @@
 
 #include "position.h"
 #include "direction.h"
+#include <string>
+#include <algorithm>
 
 class Track {
 public:
@@ -11,6 +13,8 @@ public:
     bool operator==(const Track& t);
     Direction end1;
     Direction end2;
+
+    std::string getName();
 };
 
 

@@ -9,6 +9,7 @@ public:
     Position(int x, int y);
     Position add(Direction dir);
     int x, y;
+    int row, col;
     Position operator+(const Position& pos);
     Position operator-(const Position& pos);
     Direction directionTo(const Position& pos);
@@ -21,6 +22,7 @@ public:
             else return t1.y < t2.y;
         else return t1.x < t2.x;
     }
+    static int convert(int a);
 };
 
 #endif // POSITION_H_INCLUDED

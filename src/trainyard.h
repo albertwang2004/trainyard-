@@ -20,8 +20,6 @@ public:
 
     bool isValidPosition(Position p);
 
-    int convert(int a);
-
     int X, Y, T;
     MapLocation** board;
     std::multiset<Train*> trains;

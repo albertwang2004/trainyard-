@@ -2,12 +2,15 @@
 #define DIRECTION_H_INCLUDED
 
 #include <iostream>
+#include <string>
 
 enum Direction {
-    NONE, N, NE, E, SE, S, SW, W, NW
+    NONE, N, S, W, E, NE, SE, SW, NW
 };
 
 std::pair<int,int> value(Direction dir);
+
+std::string name(Direction dir);
 
 Direction value(std::pair<int,int> vec);
 

@@ -34,7 +34,7 @@ bool Trainyard::simulateTick(bool debug) {
     for (Train* t : trains) {
         Position trainSquare = t->getPosition().add(t->getHeading());
         if (isValidPosition(trainSquare))
-            collisionQueue[convert(trainSquare.x)][convert(trainSquare.y)].insert(t);
+            collisionQueue[trainSquare.row][trainSquare.col].insert(t);
         else
             trains.erase(t);
     }
@@ -185,8 +185,3 @@ bool Trainyard::isValidPosition(Position p) {
     if (p.y > 4*Y) return false;
     return true;
 }
-
-int Trainyard::convert(int a) {
-    return a/4;
-}
-

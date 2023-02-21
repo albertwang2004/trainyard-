@@ -7,6 +7,8 @@ Position::Position() {}
 Position::Position(int x, int y) {
     this->x = x;
     this->y = y;
+    row = convert(x);
+    col = convert(y);
 }
 
 Position Position::add(Direction dir) {
@@ -25,4 +27,8 @@ Position Position::operator-(const Position& pos) {
 Direction Position::directionTo(const Position& pos) {
     Position diff = *this - pos;
     return opposite(value({diff.x, diff.y}));
+}
+
+Position::convert(int a) {
+    return a/4;
 }

@@ -23,6 +23,28 @@ std::pair<int,int> value(Direction dir) {
     }
 }
 
+std::string name(Direction dir) {
+    switch (dir) {
+    case NONE:
+        return "";
+    case N:
+        return "N";
+    case NE:
+        return "NE";
+    case E:
+        return "E";
+    case SE:
+        return "SE";
+    case S:
+        return "S";
+    case SW:
+        return "SW";
+    case W:
+        return "W";
+    case NW:
+        return "NW";
+    }
+}
 
 Direction value(std::pair<int,int> dir) {
     switch (10*dir.first+dir.second) {

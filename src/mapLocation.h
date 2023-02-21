@@ -38,6 +38,8 @@ public:
     Direction getOutput();
     Direction getInput();
 
+    std::string generateTextureName();
+
 private:
     Position pos;
     TileType type;

@@ -13,7 +13,8 @@ int main()
     TR.board[0][0].loadTrains(red, true);
     TR.board[2][0].setObject(START, N, NONE);
     TR.board[2][0].loadTrains(blue, true);
-    TR.board[1][0].setObject(SPLITTER, NONE, S);
+    TR.board[1][0].addTrack(Track(N,E));
+    TR.board[1][0].addTrack(Track(S,E));
 
 
     for (Train* t : TR.trains) {
