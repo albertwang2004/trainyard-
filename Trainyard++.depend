@@ -985,3 +985,82 @@
 1676729518 source:c:\users\alber\public_projects\trainyard++\trainyard.cpp
 	"trainyard.h"
 
+1676662036 source:c:\users\alber\public_projects\trainyard++\src\color.cpp
+	"color.h"
+
+1676728591 c:\users\alber\public_projects\trainyard++\src\color.h
+	<algorithm>
+	<vector>
+	<iostream>
+
+1676662210 source:c:\users\alber\public_projects\trainyard++\src\direction.cpp
+	"direction.h"
+
+1676662494 c:\users\alber\public_projects\trainyard++\src\direction.h
+	<iostream>
+
+1676730493 source:c:\users\alber\public_projects\trainyard++\src\display.cpp
+	"display.h"
+
+1676950920 c:\users\alber\public_projects\trainyard++\src\display.h
+	"trainyard.h"
+	<SFML/Graphics.hpp>
+	<iostream>
+	<string>
+
+1676729508 c:\users\alber\public_projects\trainyard++\src\trainyard.h
+	"maplocation.h"
+	"train.h"
+	"track.h"
+	<vector>
+	<map>
+	<iostream>
+
+1676728596 c:\users\alber\public_projects\trainyard++\src\maplocation.h
+	"tileType.h"
+	"track.h"
+	"position.h"
+	"direction.h"
+	"train.h"
+	"color.h"
+	<iostream>
+	<iterator>
+	<set>
+
+1676579072 c:\users\alber\public_projects\trainyard++\src\tiletype.h
+
+1676728601 c:\users\alber\public_projects\trainyard++\src\track.h
+	"position.h"
+	"direction.h"
+
+1676650485 c:\users\alber\public_projects\trainyard++\src\position.h
+	"direction.h"
+
+1676729126 c:\users\alber\public_projects\trainyard++\src\train.h
+	"position.h"
+	"color.h"
+
+1676730217 source:c:\users\alber\public_projects\trainyard++\src\main.cpp
+	<iostream>
+	"trainyard.h"
+	"display.h"
+
+1676727416 source:c:\users\alber\public_projects\trainyard++\src\maplocation.cpp
+	"mapLocation.h"
+
+1676652306 source:c:\users\alber\public_projects\trainyard++\src\position.cpp
+	"direction.h"
+	"position.h"
+
+1676577103 source:c:\users\alber\public_projects\trainyard++\src\tiletype.cpp
+	"tileType.h"
+
+1676584818 source:c:\users\alber\public_projects\trainyard++\src\track.cpp
+	"track.h"
+
+1676727411 source:c:\users\alber\public_projects\trainyard++\src\train.cpp
+	"train.h"
+
+1676729518 source:c:\users\alber\public_projects\trainyard++\src\trainyard.cpp
+	"trainyard.h"
+
