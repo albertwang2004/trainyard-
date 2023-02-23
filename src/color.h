@@ -24,4 +24,6 @@ Color blue(Color c);
 
 Color red(Color c);
 
+std::string getName(Color c);
+
 #endif // COLOR_H_INCLUDED

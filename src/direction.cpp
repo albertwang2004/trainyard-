@@ -149,3 +149,26 @@ Direction rotateRight(Direction dir) {
         return N;
     }
 }
+
+float rotation(Direction dir) {
+    switch (dir) {
+    case NONE:
+        return 0.f;
+    case N:
+        return 0.f;
+    case NE:
+        return 45.f;
+    case E:
+        return 90.f;
+    case SE:
+        return 135.f;
+    case S:
+        return 180.f;
+    case SW:
+        return 225.f;
+    case W:
+        return 270.f;
+    case NW:
+        return 315.f;
+    }
+}

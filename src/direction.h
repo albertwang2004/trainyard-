@@ -22,4 +22,6 @@ Direction rotateLeft(Direction dir);
 
 Direction rotateRight(Direction dir);
 
+float rotation(Direction dir);
+
 #endif // DIRECTION_H_INCLUDED

@@ -16,6 +16,7 @@ public:
     void reset();
     // returns 1 if error occurred, 0 if fine
     bool simulateTick(bool debug = false);
+    void merge();
     bool isSolved();
 
     bool isValidPosition(Position p);
@@ -24,6 +25,8 @@ public:
     MapLocation** board;
     std::multiset<Train*> trains;
     std::string name;
+
+    bool crashed;
 };
 
 #endif

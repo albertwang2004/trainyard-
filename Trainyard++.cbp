@@ -36,6 +36,12 @@
 			<Add option="-fexceptions" />
 			<Add directory="SFML-2.5.1/include" />
 		</Compiler>
+		<Linker>
+			<Add library="sfml-graphics" />
+			<Add library="sfml-window" />
+			<Add library="sfml-system" />
+			<Add directory="SFML-2.5.1/lib" />
+		</Linker>
 		<Unit filename="src/color.cpp" />
 		<Unit filename="src/color.h" />
 		<Unit filename="src/direction.cpp" />

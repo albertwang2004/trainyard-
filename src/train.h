@@ -3,6 +3,7 @@
 
 #include "position.h"
 #include "color.h"
+#include <vector>
 
 class Train {
 public:
@@ -14,6 +15,7 @@ public:
     Direction getHeading();
     void setHeading(Direction dir);
     void advance(Direction dir);
+    void heartbeat();
 
     // set and multiset compatibility
     friend bool operator<(const Train& t1, const Train& t2) {
@@ -34,6 +36,10 @@ public:
             && (heading == t.heading)
             && (color == t.color);
     }
+
+    std::vector<Color> colorHistory;
+    std::vector<Position> posHistory;
+    std::vector<Direction> headingHistory;
 
 private:
     Position pos;

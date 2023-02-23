@@ -1,38 +1,34 @@
 #include "maplocation.h"
 
-MapLocation::MapLocation() {}
+MapLocation::MapLocation() {
+    setConstants();
+}
 
 MapLocation::MapLocation(int x, int y) {
     this->pos = Position(x, y);
     this->setObject(NORMAL, NONE, NONE);
-    numTracks = 0;
-    trackCheckOrder = 0;
 }
 
 MapLocation::MapLocation(Position pos) {
     this->pos = pos;
     this->setObject(NORMAL, NONE, NONE);
-    numTracks = 0;
-    trackCheckOrder = 0;
 }
 MapLocation::MapLocation(int x, int y, TileType type, Direction output, Direction input) {
     this->pos = Position(x, y);
     this->setObject(type, output, input);
-    numTracks = 0;
-    trackCheckOrder = 0;
 }
 MapLocation::MapLocation(Position pos, TileType type, Direction output, Direction input) {
     this->pos = pos;
     this->setObject(type, output, input);
-    numTracks = 0;
-    trackCheckOrder = 0;
 }
 void MapLocation::setObject(TileType type, Direction output, Direction input) {
     this->type = type;
     this->output = output;
     this->input = input;
+    setConstants();
 }
 void MapLocation::loadTrains(std::multiset<Color> trains, bool hard) {
+    trainsDispensed = 0;
     // deep copying
     this->trains = std::multiset<Color>();
     for (Color t : trains) {
@@ -50,6 +46,8 @@ void MapLocation::setConstants() {
     numTracks = 0;
     trackCheckOrder = 0;
     memCheckOrder = 0;
+    trainsDispensed = 0;
+    loadTrains(std::multiset<Color>(),true);
 }
 void MapLocation::reset() {
     trackCheckOrder = memCheckOrder;
@@ -69,7 +67,10 @@ bool MapLocation::popTrack() {
 }
 bool MapLocation::addTrack(Track t) {
     if (type != NORMAL) return false;
-    if (numTracks == 2) return false;
+    if (numTracks == 2) {
+        tracks[0] = t;
+        tracks[1] = tracks[0];
+    }
     if (numTracks == 1)
         if (t == tracks[0])
             return false;
@@ -83,6 +84,7 @@ bool MapLocation::canOutputTrain() {
 Train* MapLocation::outputTrain() {
     Train* ret = new Train(pos.add(output), *currentTrain, output);
     ++currentTrain;
+    ++trainsDispensed;
     return ret;
 }
 bool MapLocation::acceptTrain(Train t) {
@@ -121,26 +123,17 @@ Direction MapLocation::getOutput() {
 Direction MapLocation::getInput() {
     return input;
 }
-std::string MapLocation::generateTextureName() {
-    switch (type) {
-    case NORMAL:
-        {
-            std::string out = "_track";
-            for (int it = 0, curr = trackCheckOrder; it < numTracks; ++it, curr=(curr+1)%numTracks) {
-                Track currentTrack = tracks[curr];
-                out += "_" + currentTrack.getName();
-            }
-            return out;
-        }
-    case ROCK:
-        return "_unpassable";
-    case START:
-        return "";
-    case END:
-        return "";
-    case SPLITTER:
-        return "";
-    case PAINTER:
-        return "";
+std::multiset<Color> MapLocation::getTrains() {
+    return trains;
+}
+int MapLocation::getTrainsLeft() {
+    return trainsDispensed;
+}
+std::string MapLocation::generateTrackName() {
+    std::string out = "_track";
+    for (int it = 0, curr = trackCheckOrder; it < numTracks; ++it, curr=(curr+1)%numTracks) {
+        Track currentTrack = tracks[curr];
+        out += "_" + currentTrack.getName();
     }
+    return out;
 }

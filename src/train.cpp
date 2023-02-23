@@ -4,6 +4,7 @@ Train::Train(Position pos, Color color, Direction heading) {
     this->pos = pos;
     this->color = color;
     this->heading = heading;
+    heartbeat();
 }
 
 Color Train::getColor() {
@@ -32,4 +33,10 @@ void Train::setHeading(Direction dir) {
 
 void Train::advance(Direction dir) {
     this->setPosition(this->pos.add(dir));
+}
+
+void Train::heartbeat() {
+    colorHistory.push_back(color);
+    posHistory.push_back(pos);
+    headingHistory.push_back(heading);
 }

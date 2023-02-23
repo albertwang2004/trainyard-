@@ -14,6 +14,7 @@ Trainyard::Trainyard(int X, int Y, std::string name) {
     }
     trains = std::multiset<Train*>();
     this->name = name;
+    crashed = false;
 }
 
 void Trainyard::reset() {
@@ -23,6 +24,8 @@ void Trainyard::reset() {
             board[x][y].reset();
         }
     }
+    trains = std::multiset<Train*>();
+    crashed = false;
 }
 
 bool Trainyard::simulateTick(bool debug) {
@@ -35,8 +38,10 @@ bool Trainyard::simulateTick(bool debug) {
         Position trainSquare = t->getPosition().add(t->getHeading());
         if (isValidPosition(trainSquare))
             collisionQueue[trainSquare.row][trainSquare.col].insert(t);
-        else
+        else {
             trains.erase(t);
+            crash = true;
+        }
     }
 
     // intra-square collisions
@@ -44,7 +49,13 @@ bool Trainyard::simulateTick(bool debug) {
         for (int y = 0; y < Y; y++) {
             MapLocation zone = board[x][y];
             Position center = zone.getPosition();
-            if (zone.getType() == SPLITTER) {
+            if (zone.getType() == END) {
+                for (Train* t : collisionQueue[x][y]) {
+                    bool ok = board[x][y].acceptTrain(*t);
+                    if (!ok) crash = true;
+                    trains.erase(t);
+                }
+            } else if (zone.getType() == SPLITTER) {
                 for (Train* t : collisionQueue[x][y]) {
                     if (opposite(t->getHeading()) == zone.getInput()) {
                         trains.erase(t);
@@ -89,11 +100,12 @@ bool Trainyard::simulateTick(bool debug) {
                 for (Train* t : collisionQueue[x][y]) {
                     Direction directionFromCenter = center.directionTo(t->getPosition());
                     t->setColor(mixingOutput[directionFromCenter]);
+                    t->heartbeat();
                     t->advance(t->getHeading());
                     directionFromCenter = center.directionTo(t->getPosition());
                     t->setHeading(directionFromCenter);
+                    if (debug) std::cout << "switching " << x << " " << y << std::endl;
                 }
-
             }
         }
     }
@@ -110,7 +122,8 @@ bool Trainyard::simulateTick(bool debug) {
     for (int x = 0; x < X; x++) {
         for (int y = 0; y < Y; y++) {
             if (board[x][y].canOutputTrain()) {
-                trains.insert(board[x][y].outputTrain());
+                Train* t = board[x][y].outputTrain();
+                trains.insert(t);
             }
         }
     }
@@ -133,6 +146,7 @@ bool Trainyard::simulateTick(bool debug) {
     for (Train* t : trains) {
         Color newColor = mix(interMixingZone[t->getPosition()]);
         t->setColor(newColor);
+        t->heartbeat();
     }
 
     if (debug) {
@@ -142,31 +156,29 @@ bool Trainyard::simulateTick(bool debug) {
             std::cout << t->getColor() << " " << t->getHeading() << std::endl;
         }
     }
+    // update tick
+    ++T;
+    return crashed |= crash;
+}
 
+void Trainyard::merge() {
     // merge trains
     std::multiset<Train*> update;
     for (Train* t : trains) {
+        Position trainSquare = t->getPosition().add(opposite(t->getHeading()));
+        if (isValidPosition(trainSquare))
+            board[trainSquare.row][trainSquare.col].switchCheckOrder(false);
         bool unique = true;
         for (Train* u : update) {
             if ((*t) == (*u)) {
                 unique = false;
             }
         }
-        if (unique) update.insert(t);
-    }
-    this->trains = update;
-
-    if (debug) {
-        std::cout << "done merging" << std::endl;
-        for (Train* t : trains) {
-            std::cout << t->getPosition().x << " " << t->getPosition().y << " ";
-            std::cout << t->getColor() << " " << t->getHeading() << std::endl;
+        if (unique) {
+            update.insert(t);
         }
     }
-
-    // update tick
-    ++T;
-    return crash;
+    this->trains = update;
 }
 
 bool Trainyard::isSolved() {

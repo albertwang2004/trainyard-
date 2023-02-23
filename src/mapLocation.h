@@ -38,7 +38,10 @@ public:
     Direction getOutput();
     Direction getInput();
 
-    std::string generateTextureName();
+    std::multiset<Color> getTrains();
+    int getTrainsLeft();
+
+    std::string generateTrackName();
 
 private:
     Position pos;
@@ -49,6 +52,7 @@ private:
     std::multiset<Color> trains;
     std::multiset<Color> memTrains;
     std::multiset<Color>::iterator currentTrain;
+    int trainsDispensed;
 
     int numTracks;
     int trackCheckOrder;

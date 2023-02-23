@@ -59,3 +59,24 @@ Color red(Color c) {
         return (Color)10;
     }
 }
+
+std::string getName(Color c) {
+    switch (c) {
+    case 0:
+        return "white";
+    case 3:
+        return "red";
+    case 4:
+        return "yellow";
+    case 5:
+        return "blue";
+    case 7:
+        return "orange";
+    case 8:
+        return "purple";
+    case 9:
+        return "green";
+    case 10:
+        return "trash";
+    }
+}
