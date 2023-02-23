@@ -29,6 +29,9 @@ Display::Display(Trainyard& game, float factor) {
     diff = 0;
     game.reset();
     mode = EDIT;
+    int prevShRow = -1;
+    int prevShCol = -1;
+    bool isRemoval = true;
     while (window.isOpen()) {
         sf::Event e;
         while (window.pollEvent(e)) {
@@ -43,6 +46,8 @@ Display::Display(Trainyard& game, float factor) {
                 int subCol = x*2/tileSize;
                 switch (inputType) {
                 case NONE: {
+                    prevShRow = -1;
+                    prevShCol = -1;
                     if (inRange(subRow, 2*game.X+1, 2*game.X+3) && inRange(subCol, 0, 2)) {
                         inputType = PLAY;
                     }
@@ -52,13 +57,26 @@ Display::Display(Trainyard& game, float factor) {
                     else if (inRange(subRow, 2*game.X+1, 2*game.X+3) && inRange(subCol, 4, 6)) {
                         inputType = STOP;
                     }
-                    else inputType = BOARD;
+                    else {
+                        inputType = BOARD;
+                        isRemoval = true;
+                    }
                     break;
                 }
                 }
             } else if (e.type == sf::Event::MouseButtonReleased) {
                 switch (inputType) {
                 case BOARD:
+                    if (isRemoval && mode == EDIT) {
+                        int x = e.mouseButton.x;
+                        int y = e.mouseButton.y;
+                        int trueRow = y/tileSize;
+                        int trueCol = x/tileSize;
+                        if (inRange(trueRow, 0, game.X) && inRange(trueCol, 0, game.Y)) {
+                            game.board[trueRow][trueCol].popTrack();
+                            game.board[trueRow][trueCol].popTrack();
+                        }
+                    }
                     break;
                 case PLAY:
                     if (mode == EDIT) {
@@ -84,10 +102,50 @@ Display::Display(Trainyard& game, float factor) {
                     break;
                 }
                 inputType = NONE;
+            } else if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && mode == EDIT){
+                sf::Vector2i v = sf::Mouse::getPosition(window);
+                int x = v.x;
+                int y = v.y;
+                int shRow = (y + tileSize/4)*2/tileSize;
+                int shCol = (x + tileSize/4)*2/tileSize;
+                if (inputType == BOARD) {
+                    //std::cout << x << " " << y << " : " << shRow << " " << shCol << std::endl;
+                    if (inRange(shRow, 0, 2*game.Y+1) && inRange(shCol, 0, 2*game.X+1)) if ((shRow + shCol) & 1) {
+                        if (prevShRow != -1) { // is this a valid spot to draw?
+                            int taxi = abs(prevShRow - shRow)  + abs(prevShCol - shCol);
+                            if (taxi != 0) isRemoval = false;
+                            if (taxi == 2) if (!(prevShRow % 2 == 0 && prevShRow == shRow) && !(prevShCol % 2 == 0 && prevShCol == shCol))
+                            {
+                                if (prevShRow == shRow) {
+                                    int mid = (prevShCol + shCol)/2;
+                                    game.board[shRow / 2][mid / 2].addTrack(Track(W, E));
+                                    //std::cout << shRow/2 << " " << mid/2 << " WE" << std::endl;
+                                } else if (prevShCol == shCol) {
+                                    int mid = (prevShRow + shRow)/2;
+                                    game.board[mid / 2][shCol / 2].addTrack(Track(N, S));
+                                    //std::cout << mid/2 << " " << shCol/2 << " NS" << std::endl;
+                                } else {
+                                    int midRow = (prevShRow + shRow)/2;
+                                    int midCol = (prevShCol + shCol)/2;
+                                    if (midRow % 2 == 0) midRow++;
+                                    if (midCol % 2 == 0) midCol++;
+                                    Position pos = Position(midRow * 2, midCol * 2);
+                                    Direction in = pos.directionTo(Position(prevShRow * 2, prevShCol * 2));
+                                    Direction out = pos.directionTo(Position(shRow * 2, shCol * 2));
+                                    //std::cout << midRow/2 << " " << midCol/2 << " " << rotation(in) << " " << rotation(out) << std::endl;
+                                    game.board[midRow / 2][midCol / 2].addTrack(Track(in,out));
+                                }
+                            }
+                        }
+                        prevShRow = shRow;
+                        prevShCol = shCol;
+                    }
+                    break;
+                }
             }
         }
         bool doTick = false;
-        std::cout << diff << std::endl;
+        //std::cout << diff << std::endl;
         if (mode == PLAYING) {
             diff = (difftime(timeSinceEpochMillisec(), unpauseTime) * speed + timeElapsed)/ 1000.0;
             //std::cout << diff << std::endl;
@@ -188,11 +246,8 @@ void Display::drawObject(Train* train, float diff) {
 
         s.setOrigin(half);
 
-        bool turnRight =
-            (initHeading == N && finHeading == E) ||
-            (initHeading == E && finHeading == S) ||
-            (initHeading == S && finHeading == W) ||
-            (initHeading == W && finHeading == N);
+        bool turnRight = isRightTurn(initHeading, finHeading);
+
 
         if (initHeading == finHeading) {
             s.setPosition(t * fin + (1 - t) * init);
@@ -312,8 +367,35 @@ void Display::drawObject(MapLocation mapLocation, float diff) {
         s.setRotation(rotation(mapLocation.getInput()));
         s.setPosition(sf::Vector2f(tileSize*mapLocation.getPosition().col,tileSize*mapLocation.getPosition().row) + half);
         window->draw(s);
+        break;
     }
     case PAINTER:
+        Direction input = mapLocation.getInput();
+        Direction output = mapLocation.getOutput();
+        std::string fn;
+        if (input == opposite(output)) {
+            fn = "tile_painter_f.png";
+        } else if (isRightTurn(input, output)) {
+            fn = "tile_painter_r.png";
+        } else {
+            fn = "tile_painter_l.png";
+        }
+        if (textures.find(fn) == textures.end()) {
+            load(fn, tileSize, tileSize);
+        }
+        sf::Sprite s(textures[fn]);
+        sf::Vector2f half = sf::Vector2f(tileSize / 2.f,tileSize / 2.f);
+        s.setOrigin(half);
+        s.setRotation(rotation(output));
+        s.setPosition(sf::Vector2f(tileSize*mapLocation.getPosition().col,tileSize*mapLocation.getPosition().row) + half);
+        window->draw(s);
+
+        Color color = mapLocation.getColor();
+        std::string fnPaint = "paint_" + getName(color) + ".png";
+        if (textures.find(fnPaint) == textures.end()) {
+            load(fnPaint, tileSize * 3/4, tileSize * 3/4);
+        }
+        place(fnPaint, mapLocation.getPosition().row + 0.125, mapLocation.getPosition().col + 0.125);
         break;
     }
 }

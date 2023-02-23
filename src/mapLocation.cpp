@@ -13,18 +13,19 @@ MapLocation::MapLocation(Position pos) {
     this->pos = pos;
     this->setObject(NORMAL, NONE, NONE);
 }
-MapLocation::MapLocation(int x, int y, TileType type, Direction output, Direction input) {
+MapLocation::MapLocation(int x, int y, TileType type, Direction output, Direction input, Color color) {
     this->pos = Position(x, y);
-    this->setObject(type, output, input);
+    this->setObject(type, output, input, color);
 }
-MapLocation::MapLocation(Position pos, TileType type, Direction output, Direction input) {
+MapLocation::MapLocation(Position pos, TileType type, Direction output, Direction input, Color color) {
     this->pos = pos;
-    this->setObject(type, output, input);
+    this->setObject(type, output, input, color);
 }
-void MapLocation::setObject(TileType type, Direction output, Direction input) {
+void MapLocation::setObject(TileType type, Direction output, Direction input, Color color) {
     this->type = type;
     this->output = output;
     this->input = input;
+    this->paint = color;
     setConstants();
 }
 void MapLocation::loadTrains(std::vector<Color> trains, bool hard) {
@@ -68,8 +69,10 @@ bool MapLocation::popTrack() {
 bool MapLocation::addTrack(Track t) {
     if (type != NORMAL) return false;
     if (numTracks == 2) {
-        tracks[0] = t;
+        if (tracks[0] == t) return false;
         tracks[1] = tracks[0];
+        tracks[0] = t;
+        return true;
     }
     if (numTracks == 1)
         if (t == tracks[0])
@@ -122,6 +125,9 @@ Direction MapLocation::getOutput() {
 }
 Direction MapLocation::getInput() {
     return input;
+}
+Color MapLocation::getColor() {
+    return paint;
 }
 std::vector<Color> MapLocation::getTrains() {
     return trains;

@@ -16,9 +16,9 @@ public:
     MapLocation();
     MapLocation(int x, int y);
     MapLocation(Position pos);
-    MapLocation(int x, int y, TileType type, Direction output, Direction input);
-    MapLocation(Position pos, TileType type, Direction output, Direction input);
-    void setObject(TileType type, Direction output, Direction input);
+    MapLocation(int x, int y, TileType type, Direction output, Direction input, Color color = WHITE);
+    MapLocation(Position pos, TileType type, Direction output, Direction input, Color color = WHITE);
+    void setObject(TileType type, Direction output, Direction input, Color color = WHITE);
     void setConstants();
     void loadTrains(std::vector<Color> trains, bool hard);
     void reset();
@@ -38,6 +38,7 @@ public:
     TileType getType();
     Direction getOutput();
     Direction getInput();
+    Color getColor();
 
     std::vector<Color> getTrains();
     int getTrainsLeft();
@@ -49,6 +50,7 @@ private:
     TileType type;
     Direction output;
     Direction input;
+    Color paint;
 
     std::vector<Color> trains;
     std::vector<Color> memTrains;

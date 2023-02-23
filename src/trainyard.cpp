@@ -55,6 +55,22 @@ bool Trainyard::simulateTick(bool debug) {
                     if (!ok) crash = true;
                     trains.erase(find(trains.begin(), trains.end(), t));
                 }
+            } else if (zone.getType() == PAINTER) {
+                for (Train* t : collisionQueue[x][y]) {
+                    // painters are bidirectional!
+                    Direction heading = t->getHeading();
+                    if (opposite(heading) == zone.getInput()) {
+                        trains.erase(find(trains.begin(), trains.end(), t));
+                        trains.push_back(new Train(center.add(zone.getOutput()), zone.getColor(), zone.getOutput()));
+                    } else if (opposite(heading) == zone.getOutput()) {
+                        trains.erase(find(trains.begin(), trains.end(), t));
+                        trains.push_back(new Train(center.add(zone.getInput()), zone.getColor(), zone.getInput()));
+                    } else {
+                        crash = true;
+                        trains.erase(find(trains.begin(), trains.end(), t));
+                        continue;
+                    }
+                }
             } else if (zone.getType() == SPLITTER) {
                 for (Train* t : collisionQueue[x][y]) {
                     if (opposite(t->getHeading()) == zone.getInput()) {

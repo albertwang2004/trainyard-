@@ -172,3 +172,10 @@ float rotation(Direction dir) {
         return 315.f;
     }
 }
+
+bool isRightTurn(Direction initHeading, Direction finHeading) {
+    return (initHeading == N && finHeading == E) ||
+        (initHeading == E && finHeading == S) ||
+        (initHeading == S && finHeading == W) ||
+        (initHeading == W && finHeading == N);;
+}

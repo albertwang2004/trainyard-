@@ -24,4 +24,6 @@ Direction rotateRight(Direction dir);
 
 float rotation(Direction dir);
 
+bool isRightTurn(Direction initHeading, Direction finHeading);
+
 #endif // DIRECTION_H_INCLUDED
