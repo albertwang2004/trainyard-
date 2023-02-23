@@ -1000,7 +1000,7 @@
 	<iostream>
 	<string>
 
-1677182420 source:c:\users\alber\public_projects\trainyard++\src\display.cpp
+1677183296 source:c:\users\alber\public_projects\trainyard++\src\display.cpp
 	"display.h"
 
 1677181681 c:\users\alber\public_projects\trainyard++\src\display.h
@@ -1011,7 +1011,7 @@
 	<chrono>
 	<math.h>
 
-1677181721 c:\users\alber\public_projects\trainyard++\src\trainyard.h
+1677183033 c:\users\alber\public_projects\trainyard++\src\trainyard.h
 	"maplocation.h"
 	"train.h"
 	"track.h"
@@ -1019,7 +1019,7 @@
 	<map>
 	<iostream>
 
-1677108675 c:\users\alber\public_projects\trainyard++\src\maplocation.h
+1677183126 c:\users\alber\public_projects\trainyard++\src\maplocation.h
 	"tileType.h"
 	"track.h"
 	"position.h"
@@ -1028,7 +1028,8 @@
 	"color.h"
 	<iostream>
 	<iterator>
-	<set>
+	<algorithm>
+	<vector>
 
 1676579072 c:\users\alber\public_projects\trainyard++\src\tiletype.h
 
@@ -1046,12 +1047,12 @@
 	"color.h"
 	<vector>
 
-1677182188 source:c:\users\alber\public_projects\trainyard++\src\main.cpp
+1677182946 source:c:\users\alber\public_projects\trainyard++\src\main.cpp
 	<iostream>
 	"trainyard.h"
 	"display.h"
 
-1677111984 source:c:\users\alber\public_projects\trainyard++\src\maplocation.cpp
+1677183146 source:c:\users\alber\public_projects\trainyard++\src\maplocation.cpp
 	"maplocation.h"
 
 1677007761 source:c:\users\alber\public_projects\trainyard++\src\position.cpp
@@ -1067,6 +1068,6 @@
 1677126638 source:c:\users\alber\public_projects\trainyard++\src\train.cpp
 	"train.h"
 
-1677182247 source:c:\users\alber\public_projects\trainyard++\src\trainyard.cpp
+1677183279 source:c:\users\alber\public_projects\trainyard++\src\trainyard.cpp
 	"trainyard.h"
 

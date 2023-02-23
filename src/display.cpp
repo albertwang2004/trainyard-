@@ -247,7 +247,7 @@ void Display::drawObject(MapLocation mapLocation, float diff) {
         s.setPosition(sf::Vector2f(tileSize*mapLocation.getPosition().col,tileSize*mapLocation.getPosition().row) + half);
         window->draw(s);
 
-        std::multiset<Color> trains = mapLocation.getTrains();
+        std::vector<Color> trains = mapLocation.getTrains();
         int idx = mapLocation.getTrainsLeft();
         int num = 0;
         int i = 0;
@@ -283,7 +283,7 @@ void Display::drawObject(MapLocation mapLocation, float diff) {
         s.setPosition(sf::Vector2f(tileSize*mapLocation.getPosition().col,tileSize*mapLocation.getPosition().row) + half);
         window->draw(s);
 
-        std::multiset<Color> trains = mapLocation.getTrains();
+        std::vector<Color> trains = mapLocation.getTrains();
         int num = 0;
         for (Color c : trains) {
             std::string fn = "end_" + getName(c) + ".png";

@@ -12,7 +12,7 @@ Trainyard::Trainyard(int X, int Y, std::string name) {
             board[x][y] = MapLocation(4*x + 2, 4*y + 2);
         }
     }
-    trains = std::multiset<Train*>();
+    trains = std::vector<Train*>();
     this->name = name;
     crashed = false;
 }
@@ -24,22 +24,22 @@ void Trainyard::reset() {
             board[x][y].reset();
         }
     }
-    trains = std::multiset<Train*>();
+    trains = std::vector<Train*>();
     crashed = false;
 }
 
 bool Trainyard::simulateTick(bool debug) {
     bool crash = false;
 
-    std::multiset<Train*> collisionQueue[X][Y];
+    std::vector<Train*> collisionQueue[X][Y];
 
     // queue all trains for updating
     for (Train* t : trains) {
         Position trainSquare = t->getPosition().add(t->getHeading());
         if (isValidPosition(trainSquare))
-            collisionQueue[trainSquare.row][trainSquare.col].insert(t);
+            collisionQueue[trainSquare.row][trainSquare.col].push_back(t);
         else {
-            trains.erase(t);
+            trains.erase(find(trains.begin(), trains.end(), t));
             crash = true;
         }
     }
@@ -53,24 +53,24 @@ bool Trainyard::simulateTick(bool debug) {
                 for (Train* t : collisionQueue[x][y]) {
                     bool ok = board[x][y].acceptTrain(*t);
                     if (!ok) crash = true;
-                    trains.erase(t);
+                    trains.erase(find(trains.begin(), trains.end(), t));
                 }
             } else if (zone.getType() == SPLITTER) {
                 for (Train* t : collisionQueue[x][y]) {
                     if (opposite(t->getHeading()) == zone.getInput()) {
-                        trains.erase(t);
+                        trains.erase(find(trains.begin(), trains.end(), t));
                         Direction heading = t->getHeading();
-                        trains.insert(new Train(
+                        trains.push_back(new Train(
                                 center.add(rotateLeft(rotateLeft(heading))),
                                 blue(t->getColor()),
                                 rotateLeft(rotateLeft(heading))));
-                        trains.insert(new Train(
+                        trains.push_back(new Train(
                                 center.add(rotateRight(rotateRight(heading))),
                                 red(t->getColor()),
                                 rotateRight(rotateRight(heading))));
                     } else {
                         crash = true;
-                        trains.erase(t);
+                        trains.erase(find(trains.begin(), trains.end(), t));
                         continue;
                     }
                 }
@@ -86,7 +86,7 @@ bool Trainyard::simulateTick(bool debug) {
                     }
                     if (trackHeading == NONE) {
                         crash = true;
-                        trains.erase(t);
+                        trains.erase(find(trains.begin(), trains.end(), t));
                         continue;
                     }
                     t->setHeading(trackHeading);
@@ -123,7 +123,7 @@ bool Trainyard::simulateTick(bool debug) {
         for (int y = 0; y < Y; y++) {
             if (board[x][y].canOutputTrain()) {
                 Train* t = board[x][y].outputTrain();
-                trains.insert(t);
+                trains.push_back(t);
             }
         }
     }
@@ -163,7 +163,7 @@ bool Trainyard::simulateTick(bool debug) {
 
 void Trainyard::merge() {
     // merge trains
-    std::multiset<Train*> update;
+    std::vector<Train*> update;
     for (Train* t : trains) {
         Position trainSquare = t->getPosition().add(opposite(t->getHeading()));
         if (isValidPosition(trainSquare))
@@ -175,7 +175,7 @@ void Trainyard::merge() {
             }
         }
         if (unique) {
-            update.insert(t);
+            update.push_back(t);
         }
     }
     this->trains = update;

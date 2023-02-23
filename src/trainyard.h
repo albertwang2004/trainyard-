@@ -23,7 +23,7 @@ public:
 
     int X, Y, T;
     MapLocation** board;
-    std::multiset<Train*> trains;
+    std::vector<Train*> trains;
     std::string name;
 
     bool crashed;

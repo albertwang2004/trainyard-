@@ -27,17 +27,17 @@ void MapLocation::setObject(TileType type, Direction output, Direction input) {
     this->input = input;
     setConstants();
 }
-void MapLocation::loadTrains(std::multiset<Color> trains, bool hard) {
+void MapLocation::loadTrains(std::vector<Color> trains, bool hard) {
     trainsDispensed = 0;
     // deep copying
-    this->trains = std::multiset<Color>();
+    this->trains = std::vector<Color>();
     for (Color t : trains) {
-        this->trains.insert(t);
+        this->trains.push_back(t);
     }
     if (hard) {
-        this->memTrains = std::multiset<Color>();
+        this->memTrains = std::vector<Color>();
         for (Color t : trains) {
-            this->memTrains.insert(t);
+            this->memTrains.push_back(t);
         }
     }
     this->currentTrain = this->trains.begin();
@@ -47,7 +47,7 @@ void MapLocation::setConstants() {
     trackCheckOrder = 0;
     memCheckOrder = 0;
     trainsDispensed = 0;
-    loadTrains(std::multiset<Color>(),true);
+    loadTrains(std::vector<Color>(),true);
 }
 void MapLocation::reset() {
     trackCheckOrder = memCheckOrder;
@@ -88,7 +88,7 @@ Train* MapLocation::outputTrain() {
     return ret;
 }
 bool MapLocation::acceptTrain(Train t) {
-    auto it = trains.find(t.getColor());
+    auto it = find(trains.begin(), trains.end(), t.getColor());
     if (it != trains.end()) {
         trains.erase(it);
         return true;
@@ -123,7 +123,7 @@ Direction MapLocation::getOutput() {
 Direction MapLocation::getInput() {
     return input;
 }
-std::multiset<Color> MapLocation::getTrains() {
+std::vector<Color> MapLocation::getTrains() {
     return trains;
 }
 int MapLocation::getTrainsLeft() {

@@ -5,12 +5,15 @@
 int main()
 {
     Trainyard TR = Trainyard(7, 7, "test");
-    std::multiset<Color> red;
-    red.insert(RED);
-    std::multiset<Color> blue;
-    blue.insert(BLUE);
-    std::multiset<Color> purple;
-    purple.insert(PURPLE);
+    std::vector<Color> red;
+    red.push_back(RED);
+    red.push_back(BLUE);
+    red.push_back(RED);
+    std::vector<Color> blue;
+    blue.push_back(BLUE);
+    std::vector<Color> purple;
+    purple.push_back(PURPLE);
+    purple.push_back(PURPLE);
     TR.board[0][0].setObject(START, S, NONE);
     TR.board[0][0].loadTrains(red, true);
     TR.board[2][0].setObject(START, N, NONE);

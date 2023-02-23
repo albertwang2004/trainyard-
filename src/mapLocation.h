@@ -8,7 +8,8 @@
 #include "color.h"
 #include <iostream>
 #include <iterator>
-#include <set>
+#include <algorithm>
+#include <vector>
 
 class MapLocation {
 public:
@@ -19,7 +20,7 @@ public:
     MapLocation(Position pos, TileType type, Direction output, Direction input);
     void setObject(TileType type, Direction output, Direction input);
     void setConstants();
-    void loadTrains(std::multiset<Color> trains, bool hard);
+    void loadTrains(std::vector<Color> trains, bool hard);
     void reset();
 
     bool switchCheckOrder(bool user);
@@ -38,7 +39,7 @@ public:
     Direction getOutput();
     Direction getInput();
 
-    std::multiset<Color> getTrains();
+    std::vector<Color> getTrains();
     int getTrainsLeft();
 
     std::string generateTrackName();
@@ -49,9 +50,9 @@ private:
     Direction output;
     Direction input;
 
-    std::multiset<Color> trains;
-    std::multiset<Color> memTrains;
-    std::multiset<Color>::iterator currentTrain;
+    std::vector<Color> trains;
+    std::vector<Color> memTrains;
+    std::vector<Color>::iterator currentTrain;
     int trainsDispensed;
 
     int numTracks;
