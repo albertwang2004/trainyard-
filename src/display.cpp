@@ -165,15 +165,15 @@ Display::Display(Trainyard& game, float factor) {
         for (Train* t : game.trains) {
             drawObject(t, diff);
         }
-        place("start.png", game.Y + 0.5, 0);
-        place("pause.png", game.Y + 0.5, 1);
-        place("stop.png", game.Y + 0.5, 2);
+        place("start.png", game.X + 0.5, 0);
+        place("pause.png", game.X + 0.5, 1);
+        place("stop.png", game.X + 0.5, 2);
         if (game.crashed) {
-            place("fail.png", game.Y + 0.5, 3);
+            place("fail.png", game.X + 0.5, 3);
         } else if (game.isSolved()) {
-            place("success.png", game.Y + 0.5, 3);
+            place("success.png", game.X + 0.5, 3);
         } else if (mode == PLAYING) {
-            place("pending.png", game.Y + 0.5, 3);
+            place("pending.png", game.X + 0.5, 3);
         }
         if ((diff - (long)diff) != 0.f || mode != PLAYING)
         window.display();
