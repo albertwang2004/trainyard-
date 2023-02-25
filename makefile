@@ -1,2 +1,2 @@
 Trainyard++.exe:
-	g++ -o -I/SFML-2.5.1/include/SFML/*.hpp src/*.cpp 
+	g++ *.o -o trainyard++ -LSFML-2.5.1/lib -lsfml-graphics -lsfml-window -lsfml-system
